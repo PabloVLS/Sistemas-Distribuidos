@@ -1,0 +1,6 @@
+com\mycompany\prjwebexemplo\servlets\Pet.class
+com\mycompany\prjwebexemplo\JakartaRestConfiguration.class
+com\mycompany\prjwebexemplo\servlets\GerenciarDados.class
+com\mycompany\prjwebexemplo\servlets\GravarArquivo.class
+com\mycompany\prjwebexemplo\resources\JakartaEE10Resource.class
+com\mycompany\prjwebexemplo\servlets\BuscarArquivo.class
