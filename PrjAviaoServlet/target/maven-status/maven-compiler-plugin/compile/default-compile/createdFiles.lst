@@ -1,0 +1,5 @@
+com\mycompany\prjaviaoservlet\JakartaRestConfiguration.class
+com\mycompany\prjaviaoservlet\servlets\AviaoServlet.class
+com\mycompany\prjaviaoservlet\servlets\AviaoDAO.class
+com\mycompany\prjaviaoservlet\servlets\Aviao.class
+com\mycompany\prjaviaoservlet\resources\JakartaEE10Resource.class
