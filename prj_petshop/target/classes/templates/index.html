@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Pessoas</title>
+    <style>
+        label { display: inline-block; width: 150px; margin-top: 10px; }
+        input { margin-bottom: 10px; }
+        button { margin: 5px; }
+        table { margin-top: 20px; border-collapse: collapse; width: 100%; }
+        th, td { padding: 8px; text-align: left; border: 1px solid #000; }
+    </style>
+</head>
+<body>
+
+    <h2>Cadastro de Pessoas</h2>
+
+    <label for="txtNome">Nome: </label>
+    <input type="text" id="txtNome"/><br>
+
+    <label for="txtCpf">CPF: </label>
+    <input type="text" id="txtCpf"/><br>
+
+    <label for="txtData_Nasc">Data de Nascimento: </label>
+    <input type="text" id="txtData_Nasc"/><br>
+
+    <button onclick="salvar()">Salvar</button>
+    <button onclick="consultar()">Listar</button>
+
+    <div id="conteudo"></div>
+
+    <script>
+        // Função para salvar pessoa
+        function salvar() {
+            var nome = document.getElementById("txtNome").value;
+            var cpf = document.getElementById("txtCpf").value;
+            var data_nasc = document.getElementById("txtData_Nasc").value;
+
+            if (!nome || !cpf || !data_nasc) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            var pessoa = {
+                nome: nome,
+                cpf: cpf,
+                data_nasc: data_nasc
+            };
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8080/api/pessoas", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onload = function() {
+                if (xhr.status === 200 || xhr.status === 201) {
+                    alert("Pessoa salva com sucesso!");
+                    consultar(); // Atualiza a lista
+                } else {
+                    alert("Erro ao salvar pessoa: " + xhr.statusText);
+                }
+            };
+
+            xhr.send(JSON.stringify(pessoa));
+        }
+
+        // Função para consultar pessoas
+        function consultar() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:8080/api/pessoas", true);
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var pessoas = JSON.parse(xhr.responseText);
+                    listarPessoas(pessoas);
+                } else {
+                    alert("Erro ao consultar pessoas: " + xhr.statusText);
+                }
+            };
+
+            xhr.send();
+        }
+
+        // Função para listar pessoas na tabela
+        function listarPessoas(pessoas) {
+            var out = '<table>';
+            out += '<tr><th>ID</th><th>Nome</th><th>CPF</th><th>Data de Nascimento</th></tr>';
+
+            for (var i = 0; i < pessoas.length; i++) {
+                out += '<tr>';
+                out += '<td>' + pessoas[i].idpessoa + '</td>';
+                out += '<td>' + pessoas[i].nome + '</td>';
+                out += '<td>' + pessoas[i].cpf + '</td>';
+                out += '<td>' + pessoas[i].data_nasc + '</td>';
+                out += '</tr>';
+            }
+
+            out += '</table>';
+            document.getElementById("conteudo").innerHTML = out;
+        }
+    </script>
+
+</body>
+</html>
