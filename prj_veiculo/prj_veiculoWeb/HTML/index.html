@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Veículos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        table { margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="mt-5">Cadastro de Veículos</h2>
+
+        <div class="mb-3">
+            <label for="txtNome" class="form-label">Nome do Veículo:</label>
+            <input type="text" class="form-control" id="txtNome">
+        </div>
+
+        <div class="mb-3">
+            <label for="txtMarca" class="form-label">Marca:</label>
+            <input type="text" class="form-control" id="txtMarca">
+        </div>
+
+        <div class="mb-3">
+            <label for="txtModelo" class="form-label">Modelo:</label>
+            <input type="text" class="form-control" id="txtModelo">
+        </div>
+
+        <div class="mb-3">
+            <label for="txtAno" class="form-label">Ano:</label>
+            <input type="text" class="form-control" id="txtAno">
+        </div>
+
+        <button class="btn btn-primary" onclick="salvar()">Salvar</button>
+        <button class="btn btn-secondary" onclick="consultar()">Listar</button>
+
+        <div id="conteudo" class="mt-4"></div>
+    </div>
+
+    <script>
+        function salvar() {
+            var nome = document.getElementById("txtNome").value;
+            var marca = document.getElementById("txtMarca").value;
+            var modelo = document.getElementById("txtModelo").value;
+            var ano = document.getElementById("txtAno").value;
+
+            if (!nome || !marca || !modelo || !ano) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            var veiculo = {
+                nome: nome,
+                marca: marca,
+                modelo: modelo,
+                ano: ano
+            };
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8080/api/veiculos", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onload = function() {
+                if (xhr.status === 200 || xhr.status === 201) {
+                    alert("Veículo salvo com sucesso!");
+                    consultar(); // Atualiza a lista
+                } else {
+                    alert("Erro ao salvar veículo: " + xhr.statusText);
+                }
+            };
+
+            xhr.send(JSON.stringify(veiculo));
+        }
+
+        // Função para consultar veículos
+        function consultar() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:8080/api/veiculos", true);
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var veiculos = JSON.parse(xhr.responseText);
+                    listarVeiculos(veiculos);
+                } else {
+                    alert("Erro ao consultar veículos: " + xhr.statusText);
+                }
+            };
+
+            xhr.send();
+        }
+
+        // Função para listar veículos na tabela
+        function listarVeiculos(veiculos) {
+            var out = '<table class="table table-bordered">';
+            out += '<thead><tr><th>ID</th><th>Nome</th><th>Marca</th><th>Modelo</th><th>Ano</th></tr></thead><tbody>';
+
+            for (var i = 0; i < veiculos.length; i++) {
+                out += '<tr>';
+                out += '<td>' + veiculos[i].idveiculo + '</td>';
+                out += '<td>' + veiculos[i].nome + '</td>';
+                out += '<td>' + veiculos[i].marca + '</td>';
+                out += '<td>' + veiculos[i].modelo + '</td>';
+                out += '<td>' + veiculos[i].ano + '</td>';
+                out += '</tr>';
+            }
+
+            out += '</tbody></table>';
+            document.getElementById("conteudo").innerHTML = out;
+        }
+    </script>
+
+    <!-- Script do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
