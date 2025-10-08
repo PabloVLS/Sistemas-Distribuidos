@@ -1,275 +1,308 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Cadastro de Veículos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
     <style>
-        table {
-            margin-top: 20px;
+        body {
+            background-color: #f8f9fa;
         }
-
-        th,
-        td {
-            padding: 12px;
-            text-align: left;
-            vertical-align: middle;
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        #statusMessage {
-            margin-top: 12px;
-            min-height: 24px;
+        
+        .card-header {
+            background: linear-gradient(135deg, #0d6efd, #0a58ca);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            border: none;
+        }
+        
+        .btn {
+            border-radius: 6px;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .page-title {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
         }
     </style>
 </head>
 
-<body>
+<body class="bg-light">
     <div class="container py-4">
-        <h2 class="mt-3">Cadastro de Veículos</h2>
+        <h2 class="page-title text-center">Cadastro de Veículos</h2>
 
-        <form id="veiculoForm" class="row g-3 mt-2" onsubmit="event.preventDefault(); salvar();">
-            <input type="hidden" id="idveiculo">
-            <div class="col-md-6">
-                <label for="txtNome" class="form-label">Nome do Veículo</label>
-                <input type="text" class="form-control" id="txtNome" required>
+        <div id="alertArea"></div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-car-front me-2"></i>Formulário de Cadastro</h5>
             </div>
+            <div class="card-body">
+                <form id="veiculoForm" onsubmit="event.preventDefault(); salvarOuAtualizar();">
+                    <input type="hidden" id="currentId" value="" />
 
-            <div class="col-md-6">
-                <label for="txtMarca" class="form-label">Marca</label>
-                <input type="text" class="form-control" id="txtMarca" required>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="txtNome" class="form-label">Nome <span class="text-danger">*</span></label>
+                            <input type="text" id="txtNome" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="txtMarca" class="form-label">Marca <span class="text-danger">*</span></label>
+                            <input type="text" id="txtMarca" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="txtModelo" class="form-label">Modelo <span class="text-danger">*</span></label>
+                            <input type="text" id="txtModelo" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="txtAno" class="form-label">Ano <span class="text-danger">*</span></label>
+                            <input type="number" id="txtAno" class="form-control" min="1886" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="button" class="btn btn-secondary" onclick="limparFormulario()">
+                            <i class="bi bi-eraser me-1"></i>Limpar
+                        </button>
+                        <button type="submit" id="btnSalvar" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i>Salvar
+                        </button>
+                    </div>
+                </form>
             </div>
+        </div>
 
-            <div class="col-md-6">
-                <label for="txtModelo" class="form-label">Modelo</label>
-                <input type="text" class="form-control" id="txtModelo" required>
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Lista de Veículos</h5>
+                <button class="btn btn-outline-secondary btn-sm" onclick="Consultar()">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Atualizar
+                </button>
             </div>
-
-            <div class="col-md-3">
-                <label for="txtAno" class="form-label">Ano</label>
-                <input type="number" class="form-control" id="txtAno" min="1886" max="2100" required>
+            <div class="card-body">
+                <div id="conteudo" class="table-responsive"></div>
             </div>
-
-            <div class="col-md-3 d-flex align-items-end gap-2">
-                <button type="submit" class="btn btn-primary" id="btnSalvar">Salvar</button>
-                <button type="button" class="btn btn-secondary" id="btnLimpar"
-                    onclick="limparFormulario()">Limpar</button>
-                <button type="button" class="btn btn-info" id="btnListar" onclick="consultar()">Listar</button>
-            </div>
-        </form>
-
-        <div id="statusMessage" aria-live="polite"></div>
-
-        <div id="conteudo" class="mt-4"></div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        const API = 'http://localhost:8082/api/veiculos';
-        // cache local para permitir preencher formulário a partir do id (usado no innerHTML)
-        const veiculosCache = {};
+        var currentId = null;
+        var apiUrl = "http://localhost:8082/api/veiculos";
 
-        document.addEventListener('DOMContentLoaded', () => {
-            consultar();
-        });
-
-        function escapeHtml(str) {
-            if (str === undefined || str === null) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;')
-                .replace(/\//g, '&#x2F;');
+        // wrapper chamado pelo form
+        function salvarOuAtualizar() {
+            // apenas chama a função salvar() existente
+            salvar();
         }
 
-        function setStatus(msg = '', type = 'info') {
-            const el = document.getElementById('statusMessage');
-            el.textContent = msg;
-            el.className = (type === 'error') ? 'text-danger' : (type === 'success') ? 'text-success' : 'text-muted';
-        }
-
+        // limpa o formulário e reseta estado de edição
         function limparFormulario() {
-            document.getElementById('idveiculo').value = '';
-            document.getElementById('veiculoForm').reset();
-            document.getElementById('btnSalvar').textContent = 'Salvar';
-            setStatus('');
+            var form = document.getElementById("veiculoForm");
+            if (form) form.reset();
+            currentId = null;
+            document.getElementById("currentId").value = "";
+            var btn = document.getElementById("btnSalvar");
+            if (btn) btn.innerHTML = '<i class="bi bi-save me-1"></i>Salvar';
         }
 
-        async function salvar() {
-            setStatus('Enviando...', 'info');
-            const id = document.getElementById('idveiculo').value;
-            const nome = document.getElementById('txtNome').value.trim();
-            const marca = document.getElementById('txtMarca').value.trim();
-            const modelo = document.getElementById('txtModelo').value.trim();
-            const anoValue = document.getElementById('txtAno').value;
+        function salvar() {
+            var nomeElem = document.getElementById("txtNome");
+            var marca = document.getElementById("txtMarca").value;
+            var modelo = document.getElementById("txtModelo").value;
+            var ano = document.getElementById("txtAno").value;
 
-            if (!nome || !marca || !modelo || !anoValue) {
-                alert('Por favor, preencha todos os campos.');
-                return;
+            var nome = nomeElem ? nomeElem.value : marca;
+
+            var payload = {
+                nome: nome,
+                marca: marca,
+                modelo: modelo,
+                ano: parseInt(ano, 10)
+            };
+
+            var xhr = new XMLHttpRequest();
+            var url = apiUrl;
+
+            if (currentId) {
+                url = apiUrl + "/" + currentId;
+                xhr.open("PUT", url, true);
+            } else {
+                xhr.open("POST", url, true);
             }
 
-            const ano = parseInt(anoValue, 10);
-            if (isNaN(ano) || ano < 1886 || ano > 2100) {
-                alert('Ano inválido. Informe um número entre 1886 e 2100.');
-                return;
-            }
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
-            const veiculo = { nome, marca, modelo, ano };
-
-            try {
-                let response;
-                if (id) {
-                    response = await fetch(`${API}/${id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(veiculo)
-                    });
-                } else {
-                    response = await fetch(API, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(veiculo)
-                    });
-                }
-
-                const contentType = response.headers.get('Content-Type') || '';
-                let body = null;
-                if (contentType.includes('application/json')) body = await response.json();
-                else body = await response.text();
-
-                if (response.ok) {
-                    setStatus(id ? 'Veículo atualizado com sucesso.' : 'Veículo salvo com sucesso.', 'success');
-                    limparFormulario();
-                    consultar();
-                } else {
-                    if (body && typeof body === 'object') {
-                        const msgs = [];
-                        if (body.error) msgs.push(body.error);
-                        else {
-                            for (const k in body) msgs.push(k + ': ' + body[k]);
-                        }
-                        alert('Erro: ' + msgs.join('\n'));
-                        setStatus('Erro ao salvar veículo.', 'error');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 201) {
+                        alert(currentId ? "Veículo atualizado com sucesso!" : "Veículo cadastrado com sucesso!");
+                        currentId = null;
+                        document.getElementById("currentId").value = "";
+                        Consultar();
+                        // limpa campos
+                        if (document.getElementById("txtNome")) document.getElementById("txtNome").value = "";
+                        document.getElementById("txtMarca").value = "";
+                        document.getElementById("txtModelo").value = "";
+                        document.getElementById("txtAno").value = "";
+                        var btn = document.getElementById("btnSalvar");
+                        if (btn) btn.innerHTML = '<i class="bi bi-save me-1"></i>Salvar';
                     } else {
-                        alert('Erro ao salvar veículo: ' + (response.statusText || body));
-                        setStatus('Erro ao salvar veículo.', 'error');
+                        alert("Erro ao salvar veículo. Status: " + xhr.status + " - " + xhr.responseText);
                     }
                 }
-            } catch (err) {
-                console.error(err);
-                alert('Erro de rede: ' + err.message);
-                setStatus('Erro de rede ao salvar.', 'error');
-            }
+            };
+
+            xhr.send(JSON.stringify(payload));
         }
 
-        async function consultar() {
-            setStatus('Carregando lista...', 'info');
-            try {
-                const res = await fetch(API);
-                if (!res.ok) throw new Error('HTTP ' + res.status + ' — ' + res.statusText);
-                const veiculos = await res.json();
-                montarTabelaInnerHTML(veiculos);
-                setStatus('Lista carregada.', 'info');
-            } catch (err) {
-                console.error(err);
-                setStatus('Erro ao carregar lista: ' + err.message, 'error');
-            }
-        }
+        function Consultar() {
+            var xmlHTTP_GET = new XMLHttpRequest();
+            var url = apiUrl;
 
-        // monta tabela com innerHTML (usando escapeHtml)
-        function montarTabelaInnerHTML(veiculos) {
-            const container = document.getElementById('conteudo');
-            if (!Array.isArray(veiculos) || veiculos.length === 0) {
-                container.innerHTML = '<p>Nenhum veículo encontrado.</p>';
-                return;
-            }
-
-            // atualizar cache
-            veiculos.forEach(v => {
-                const id = v.idveiculo ?? v.id;
-                if (id !== undefined && id !== null) veiculosCache[id] = v;
-            });
-
-            let out = '';
-            out += '<table class="table table-striped table-bordered">';
-            out += '<thead><tr>';
-            out += '<th scope="col">ID</th>';
-            out += '<th scope="col">Nome</th>';
-            out += '<th scope="col">Marca</th>';
-            out += '<th scope="col">Modelo</th>';
-            out += '<th scope="col">Ano</th>';
-            out += '<th scope="col">Ações</th>';
-            out += '</tr></thead>';
-            out += '<tbody>';
-
-            for (let i = 0; i < veiculos.length; i++) {
-                const v = veiculos[i];
-                const id = v.idveiculo ?? v.id ?? '';
-                out += '<tr>';
-                out += '<td>' + escapeHtml(id) + '</td>';
-                out += '<td>' + escapeHtml(v.nome) + '</td>';
-                out += '<td>' + escapeHtml(v.marca) + '</td>';
-                out += '<td>' + escapeHtml(v.modelo) + '</td>';
-                out += '<td>' + escapeHtml(v.ano) + '</td>';
-                // ações: chamam funções globais passando o id
-                out += '<td>';
-                out += '<button type="button" class="btn btn-sm btn-outline-success me-2" onclick="preencherParaEdicao(\'' + escapeHtml(id) + '\')">Editar</button>';
-                out += '<button type="button" class="btn btn-sm btn-outline-danger" onclick="excluirVeiculo(\'' + escapeHtml(id) + '\')">Excluir</button>';
-                out += '</td>';
-                out += '</tr>';
-            }
-
-            out += '</tbody></table>';
-            container.innerHTML = out;
-        }
-
-        // preenche o form para edição a partir do cache
-        function preencherParaEdicao(id) {
-            const v = veiculosCache[id];
-            if (!v) {
-                alert('Veículo não encontrado no cache. Clique em Listar para atualizar.');
-                return;
-            }
-            document.getElementById('idveiculo').value = id;
-            document.getElementById('txtNome').value = v.nome ?? '';
-            document.getElementById('txtMarca').value = v.marca ?? '';
-            document.getElementById('txtModelo').value = v.modelo ?? '';
-            document.getElementById('txtAno').value = v.ano ?? '';
-            document.getElementById('btnSalvar').textContent = 'Atualizar';
-            setStatus('Modo edição: altere os campos e clique em Atualizar', 'info');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function excluirVeiculo(id) {
-            if (!id) { alert('ID inválido para exclusão.'); return; }
-            if (!confirm('Confirma exclusão do veículo ID ' + id + '?')) return;
-
-            try {
-                const res = await fetch(`${API}/${id}`, { method: 'DELETE' });
-                if (res.ok) {
-                    setStatus('Veículo excluído.', 'success');
-                    // remover do cache
-                    delete veiculosCache[id];
-                    consultar();
-                } else {
-                    const ct = res.headers.get('Content-Type') || '';
-                    let body = '';
-                    if (ct.includes('application/json')) body = await res.json();
-                    else body = await res.text();
-                    alert('Erro ao excluir: ' + (body.error || JSON.stringify(body) || res.statusText));
-                    setStatus('Erro ao excluir.', 'error');
+            xmlHTTP_GET.onreadystatechange = function () {
+                if (xmlHTTP_GET.readyState == 4) {
+                    if (xmlHTTP_GET.status == 200) {
+                        var lstV = JSON.parse(xmlHTTP_GET.responseText);
+                        listarVeiculos(lstV);
+                    } else {
+                        document.getElementById("conteudo").innerHTML = "<div class='alert alert-danger'>Erro ao buscar veículos (status " + xmlHTTP_GET.status + ").</div>";
+                    }
                 }
-            } catch (err) {
-                console.error(err);
-                alert('Erro de rede ao excluir: ' + err.message);
-                setStatus('Erro de rede ao excluir.', 'error');
-            }
+            };
+
+            xmlHTTP_GET.open("GET", url, true);
+            xmlHTTP_GET.send();
         }
+
+        function listarVeiculos(lstV) {
+            var out = `
+      <table class="table table-striped table-bordered text-center align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Ano</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+            if (!Array.isArray(lstV)) lstV = [];
+
+            for (var i = 0; i < lstV.length; i++) {
+                var v = lstV[i];
+                var id = v.idveiculo;
+                var nome = v.nome || "";
+                var marca = v.marca || "";
+                var modelo = v.modelo || "";
+                var ano = v.ano || "";
+
+                out += `
+        <tr>
+          <td>${id}</td>
+          <td>${nome}</td>
+          <td>${marca}</td>
+          <td>${modelo}</td>
+          <td>${ano}</td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm" onclick="editar(${id})">
+              <i class="bi bi-pencil"></i> Editar
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="deletar(${id})">
+              <i class="bi bi-trash"></i> Deletar
+            </button>
+          </td>
+        </tr>
+      `;
+            }
+
+            out += `
+        </tbody>
+      </table>
+    `;
+
+            document.getElementById("conteudo").innerHTML = out;
+        }
+
+        function editar(id) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", apiUrl + "/" + id, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var v = JSON.parse(xhr.responseText);
+                        if (document.getElementById("txtNome")) document.getElementById("txtNome").value = v.nome || "";
+                        document.getElementById("txtMarca").value = v.marca || "";
+                        document.getElementById("txtModelo").value = v.modelo || "";
+                        document.getElementById("txtAno").value = v.ano || "";
+                        currentId = id;
+                        document.getElementById("currentId").value = id;
+                        var btn = document.getElementById("btnSalvar");
+                        if (btn) btn.innerHTML = '<i class="bi bi-save me-1"></i>Atualizar';
+                        if (document.getElementById("txtNome")) document.getElementById("txtNome").focus();
+                    } else {
+                        alert("Erro ao obter veículo para edição. Status: " + xhr.status);
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        function deletar(id) {
+            if (!confirm("Confirma exclusão do veículo de id " + id + " ?")) return;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("DELETE", apiUrl + "/" + id, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 204 || (xhr.status >= 200 && xhr.status < 300)) {
+                        alert("Veículo excluído com sucesso!");
+                        Consultar();
+                    } else {
+                        alert("Erro ao excluir veículo. Status: " + xhr.status + " - " + xhr.responseText);
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+
+        // carrega lista ao abrir a página
+        window.onload = function () {
+            Consultar();
+        };
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

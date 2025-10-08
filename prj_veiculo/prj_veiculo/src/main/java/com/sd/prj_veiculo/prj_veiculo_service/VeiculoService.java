@@ -2,7 +2,7 @@ package com.sd.prj_veiculo.prj_veiculo_service;
 
 import java.util.List;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sd.prj_veiculo.prj_veiculo_model.Veiculo;
@@ -16,6 +16,7 @@ public class VeiculoService {
 
     private final VeiculoRepository veiculoRepository;
 
+    @Autowired
     public VeiculoService(VeiculoRepository veiculoRepository) {
         this.veiculoRepository = veiculoRepository;
     }
