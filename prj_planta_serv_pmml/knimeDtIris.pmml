@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PMML version="4.2" xmlns="http://www.dmg.org/PMML-4_2">
+  <Header copyright="clc">
+    <Application name="KNIME" version="5.4.0"/>
+  </Header>
+  <DataDictionary numberOfFields="5">
+    <DataField name="SepalLengthCm" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="-1.772110383042743" rightMargin="2.3712224342493595"/>
+    </DataField>
+    <DataField name="SepalWidthCm" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="-2.299895285694583" rightMargin="3.0089539113237436"/>
+    </DataField>
+    <DataField name="PetalLengthCm" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="-1.4783839688372797" rightMargin="1.802089886794954"/>
+    </DataField>
+    <DataField name="PetalWidthCm" optype="continuous" dataType="double">
+      <Interval closure="closedClosed" leftMargin="-1.344542094547092" rightMargin="1.7590649537355247"/>
+    </DataField>
+    <DataField name="Species" optype="categorical" dataType="string">
+      <Value value="Iris-setosa"/>
+      <Value value="Iris-versicolor"/>
+      <Value value="Iris-virginica"/>
+    </DataField>
+  </DataDictionary>
+  <TreeModel modelName="DecisionTree" functionName="classification" splitCharacteristic="binarySplit" missingValueStrategy="lastPrediction" noTrueChildStrategy="returnNullPrediction">
+    <MiningSchema>
+      <MiningField name="SepalLengthCm" invalidValueTreatment="asIs"/>
+      <MiningField name="SepalWidthCm" invalidValueTreatment="asIs"/>
+      <MiningField name="PetalLengthCm" invalidValueTreatment="asIs"/>
+      <MiningField name="PetalWidthCm" invalidValueTreatment="asIs"/>
+      <MiningField name="Species" invalidValueTreatment="asIs" usageType="target"/>
+    </MiningSchema>
+    <Node id="0" score="Iris-setosa" recordCount="73.0">
+      <True/>
+      <ScoreDistribution value="Iris-setosa" recordCount="26.0"/>
+      <ScoreDistribution value="Iris-versicolor" recordCount="25.0"/>
+      <ScoreDistribution value="Iris-virginica" recordCount="22.0"/>
+      <Node id="1" score="Iris-setosa" recordCount="26.0">
+        <SimplePredicate field="PetalWidthCm" operator="lessOrEqual" value="-0.5686403324764379"/>
+        <ScoreDistribution value="Iris-setosa" recordCount="26.0"/>
+        <ScoreDistribution value="Iris-versicolor" recordCount="0.0"/>
+        <ScoreDistribution value="Iris-virginica" recordCount="0.0"/>
+      </Node>
+      <Node id="2" score="Iris-versicolor" recordCount="47.0">
+        <SimplePredicate field="PetalWidthCm" operator="greaterThan" value="-0.5686403324764379"/>
+        <ScoreDistribution value="Iris-setosa" recordCount="0.0"/>
+        <ScoreDistribution value="Iris-versicolor" recordCount="25.0"/>
+        <ScoreDistribution value="Iris-virginica" recordCount="22.0"/>
+        <Node id="3" score="Iris-versicolor" recordCount="22.0">
+          <SimplePredicate field="PetalLengthCm" operator="lessOrEqual" value="0.6066629733018518"/>
+          <ScoreDistribution value="Iris-setosa" recordCount="0.0"/>
+          <ScoreDistribution value="Iris-versicolor" recordCount="22.0"/>
+          <ScoreDistribution value="Iris-virginica" recordCount="0.0"/>
+        </Node>
+        <Node id="4" score="Iris-virginica" recordCount="25.0">
+          <SimplePredicate field="PetalLengthCm" operator="greaterThan" value="0.6066629733018518"/>
+          <ScoreDistribution value="Iris-setosa" recordCount="0.0"/>
+          <ScoreDistribution value="Iris-versicolor" recordCount="3.0"/>
+          <ScoreDistribution value="Iris-virginica" recordCount="22.0"/>
+          <Node id="5" score="Iris-versicolor" recordCount="6.0">
+            <SimplePredicate field="PetalWidthCm" operator="lessOrEqual" value="0.789187751147207"/>
+            <ScoreDistribution value="Iris-setosa" recordCount="0.0"/>
+            <ScoreDistribution value="Iris-versicolor" recordCount="3.0"/>
+            <ScoreDistribution value="Iris-virginica" recordCount="3.0"/>
+            <Node id="6" score="Iris-versicolor" recordCount="4.0">
+              <SimplePredicate field="PetalLengthCm" operator="lessOrEqual" value="0.9124698581489243"/>
+              <ScoreDistribution value="Iris-setosa" recordCount="0.0"/>
+              <ScoreDistribution value="Iris-versicolor" recordCount="3.0"/>
+              <ScoreDistribution value="Iris-virginica" recordCount="1.0"/>
+            </Node>
+            <Node id="9" score="Iris-virginica" recordCount="2.0">
+              <SimplePredicate field="PetalLengthCm" operator="greaterThan" value="0.9124698581489243"/>
+              <ScoreDistribution value="Iris-setosa" recordCount="0.0"/>
+              <ScoreDistribution value="Iris-versicolor" recordCount="0.0"/>
+              <ScoreDistribution value="Iris-virginica" recordCount="2.0"/>
+            </Node>
+          </Node>
+          <Node id="10" score="Iris-virginica" recordCount="19.0">
+            <SimplePredicate field="PetalWidthCm" operator="greaterThan" value="0.789187751147207"/>
+            <ScoreDistribution value="Iris-setosa" recordCount="0.0"/>
+            <ScoreDistribution value="Iris-versicolor" recordCount="0.0"/>
+            <ScoreDistribution value="Iris-virginica" recordCount="19.0"/>
+          </Node>
+        </Node>
+      </Node>
+    </Node>
+  </TreeModel>
+</PMML>
