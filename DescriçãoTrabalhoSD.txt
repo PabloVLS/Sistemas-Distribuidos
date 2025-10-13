@@ -1,0 +1,85 @@
+Serviço 1 (Java + PostgreSQL) — Profissionais
+
+Guarda dados do profissional + perfil + documentos + feedbacks
+
+Tabelas:
+
+profissionais (id, nome, email, telefone, profissao, descricao, cidade, estado, senha_hash, data_cadastro)
+
+documentos (id, profissional_id, tipo_documento, url_documento, status_verificacao)
+
+feedbacks (id, profissional_id, cliente_id, nota, comentario, data_feedback)
+
+usuarios_trabalhadores (id, profissional_id, login, senha_hash, status) — pra controlar login se quiser separar
+
+Ou se preferir, pode unificar profissionais e usuarios_trabalhadores numa única tabela para simplificar.
+
+Serviço 2 (Java + PostgreSQL) — Clientes
+
+Guarda dados dos clientes e perfis simples
+
+Tabelas:
+
+clientes (id, nome, email, telefone, empresa, area_atuacao, senha_hash, data_cadastro)
+
+usuarios_clientes (id, cliente_id, login, senha_hash, status)
+
+Novamente, pode unificar clientes e usuarios_clientes pra simplificar.
+
+Serviço 3 (Python + MongoDB) — Mensagens e Contratações
+
+Armazena conversas, propostas de contratação, histórico e status
+
+Coleções:
+
+conversas (id, participantes: [cliente_id, profissional_id], mensagens: [{remetente_id, texto, data_envio}])
+
+contratacoes (id, cliente_id, profissional_id, descricao_servico, status (pendente, aceito, recusado), data_pedido, data_inicio, data_fim, valor)
+
+Serviço Gestor (Java) — Orquestração
+
+Autenticação, autorização (JWT/OAuth)
+
+Roteia requisições para os 3 serviços
+
+Implementa regras de negócio (ex: só cliente pode contratar, só profissional pode receber feedback)
+
+Centraliza logs e métricas
+
+Serviço Web (React/Angular/Vue)
+
+Cadastro/login para cliente e profissional
+
+Perfil profissional (dados + feedbacks)
+
+Busca e listagem de profissionais
+
+Envio de propostas e contratação
+
+Chat entre cliente e profissional
+
+Área do cliente para ver status das contratações e feedbacks enviados
+
+Por que essa arquitetura é mais fácil?
+
+Serviço 1 concentra tudo do profissional: menos integrações para dados que se conversam muito (perfil, documentos, feedbacks)
+
+Serviço 2 é só cliente — perfil simples, menos tabelas
+
+Serviço 3, em MongoDB, guarda tudo que é mais dinâmico e que muda rápido: chat e contratos (que podem ter vários status e formatos diferentes)
+
+Gestor cuida da segurança e fluxo sem complicar o modelo de dados
+
+Serviço web consome APIs claras e simples, facilita o front
+
+Sugestão extra
+
+Se quiser algo ainda mais simples, pode fazer:
+
+Unificar usuarios_trabalhadores e profissionais em 1 tabela só
+
+Unificar usuarios_clientes e clientes em 1 tabela só
+
+Feedbacks no serviço do profissional (Postgres) — para consultas rápidas
+
+Contratos e chat só no MongoDB (Python)
