@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Veículos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/veiculos.css">
+</head>
+<body>
+    <!-- Navigation Minimal -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="bi bi-car-front"></i>
+                <span>Sistema de veículos</span>
+            </div>
+            <div class="nav-links">
+                <a href="pessoas.html" class="nav-link">
+                    <i class="bi bi-people"></i>
+                </a>
+                <a href="veiculos.html" class="nav-link active">
+                    <i class="bi bi-car-front"></i>
+                </a>
+                <a href="relatorio.html" class="nav-link">
+                    <i class="bi bi-graph-up"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header Simples -->
+        <div class="page-header">
+            <h1>Veículos</h1>
+            <p class="page-subtitle">Gestão simplificada da frota</p>
+        </div>
+
+        <!-- Form Compact -->
+        <div class="form-section">
+            <form id="formVeiculo" class="compact-form">
+                <div class="form-row">
+                    <div class="input-group">
+                        <input type="text" id="modelo" placeholder="Modelo do veículo" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="number" id="ano" placeholder="Ano" min="1900" max="2030" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="placa" placeholder="Placa" required>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="bi bi-plus-lg"></i>
+                        Adicionar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Lista Limpa -->
+        <div class="list-section">
+            <div class="list-header">
+                <span class="list-title">Veículos Cadastrados</span>
+                <span class="list-count" id="contadorVeiculos">0</span>
+            </div>
+
+            <div class="vehicles-list" id="listaVeiculos">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <span>Carregando veículos...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Clean -->
+    <div class="modal" id="modalEditar">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Veículo</h3>
+                <button class="close-btn" onclick="fecharModal()">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="idVeiculoEditar">
+                <div class="modal-inputs">
+                    <input type="text" id="modeloEditar" placeholder="Modelo" required>
+                    <input type="number" id="anoEditar" placeholder="Ano" required>
+                    <input type="text" id="placaEditar" placeholder="Placa" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="fecharModal()">Cancelar</button>
+                <button class="btn-primary" onclick="salvarEdicaoVeiculo()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/veiculos.js"></script>
+</body>
+</html>

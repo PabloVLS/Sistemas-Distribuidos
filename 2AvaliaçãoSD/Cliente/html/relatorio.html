@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/relatorios.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="bi bi-graph-up"></i>
+                <span>Relatórios</span>
+            </div>
+            <div class="nav-links">
+                <a href="pessoas.html" class="nav-link">
+                    <i class="bi bi-people"></i>
+                </a>
+                <a href="veiculos.html" class="nav-link">
+                    <i class="bi bi-car-front"></i>
+                </a>
+                <a href="relatorio.html" class="nav-link active">
+                    <i class="bi bi-graph-up"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Relatório</h1>
+            <p class="page-subtitle">Pessoas e veículos vinculados</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="totalPessoas">0</div>
+                    <div class="stat-label">Pessoas</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-car-front"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="totalVeiculos">0</div>
+                    <div class="stat-label">Veículos</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="bi bi-link-45deg"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="totalVinculos">0</div>
+                    <div class="stat-label">Vínculos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relatório -->
+        <div class="list-section">
+            <div class="list-header">
+                <span class="list-title">Relatório Completo</span>
+                <button class="refresh-btn" onclick="carregarRelatorio()">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Atualizar
+                </button>
+            </div>
+
+            <div class="report-table">
+                <div class="table-header">
+                    <div class="table-cell">ID</div>
+                    <div class="table-cell">Nome</div>
+                    <div class="table-cell">CPF</div>
+                    <div class="table-cell">Veículo</div>
+                    <div class="table-cell">Ano</div>
+                    <div class="table-cell">Placa</div>
+                    <div class="table-cell">Ações</div>
+                </div>
+                <div class="table-body" id="tabelaRelatorio">
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <span>Carregando relatório...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/relatorios.js"></script>
+</body>
+</html>
