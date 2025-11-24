@@ -1,4 +1,9 @@
-const URL_BASE = 'http://localhost:8080/gestor';
+// URL base do serviço Gestor.
+// Por padrão aponta para o PC1 (Gestor). Se preferir, sobrescreva em HTML com:
+// <script>window.GESTOR_URL = 'http://26.3.21.108:8080/gestor';</script>
+const URL_BASE = (window.GESTOR_URL && String(window.GESTOR_URL).trim() !== '')
+    ? window.GESTOR_URL
+    : 'http://26.3.21.108:8080/gestor';
 
 document.addEventListener('DOMContentLoaded', carregarRelatorio);
 
@@ -59,9 +64,11 @@ function exibirRelatorio(dados) {
             </div>
             <div class="table-cell" data-label="Ações">
                 <div class="actions">
-                    <button class="action-btn" onclick="excluirPessoa(${item.pessoaId})" title="Excluir pessoa">
-                        <i class="bi bi-trash"></i>
+                    ${item.veiculoId ? `
+                    <button class="action-btn" onclick="excluirVinculo(${item.pessoaId}, ${item.veiculoId})" title="Remover vínculo">
+                        <i class="bi bi-unlink"></i>
                     </button>
+                    ` : ''}
                 </div>
             </div>
         </div>
@@ -80,6 +87,25 @@ async function excluirPessoa(id) {
             carregarRelatorio();
         } else {
             alert('Erro ao excluir pessoa');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao conectar com o servidor');
+    }
+}
+
+async function excluirVinculo(idPessoa, idVeiculo) {
+    if (!confirm('Remover este vínculo entre pessoa e veículo?')) return;
+
+    try {
+        const response = await fetch(`${URL_BASE}/vinculo/${idPessoa}/${idVeiculo}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            carregarRelatorio();
+        } else {
+            alert('Erro ao remover vínculo');
         }
     } catch (error) {
         console.error('Erro:', error);

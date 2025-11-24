@@ -58,4 +58,9 @@ public class PVLS_PessoaController {
     public PVLS_PessoaVeiculo PVLS_VincularVeiculo(@PathVariable Long idPessoa, @PathVariable Long idVeiculo) {
         return PVLS_servicePessoa.PVLS_VincularVeiculo(idPessoa, idVeiculo);
     }
+
+    @DeleteMapping("/{idPessoa}/veiculo/{idVeiculo}")
+    public void PVLS_DesvincularVeiculo(@PathVariable Long idPessoa, @PathVariable Long idVeiculo) {
+        PVLS_servicePessoa.PVLS_DesvincularVeiculo(idPessoa, idVeiculo);
+    }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 import com.example.AvaliacaoSDPessoas.Model.PVLS_Pessoa;
 import com.example.AvaliacaoSDPessoas.Model.PVLS_PessoaVeiculo;
+import com.example.AvaliacaoSDPessoas.Model.PVLS_PessoaVeiculoId;
 import com.example.AvaliacaoSDPessoas.Repository.PVLS_PessoaRepository;
 import com.example.AvaliacaoSDPessoas.Repository.PVLS_PessoaVeiculoRepository;
 import com.example.AvaliacaoSDPessoas.DTO.PVLS_VeiculoDTO;
@@ -77,5 +78,16 @@ public class PVLS_PessoaService {
         }
         
         return veiculosVinculados;
+    }
+
+    public void PVLS_DesvincularVeiculo(Long idPessoa, Long idVeiculo) {
+        try {
+            PVLS_PessoaVeiculoId id = new PVLS_PessoaVeiculoId(idPessoa, idVeiculo);
+            if (PVLS_repoVinculo.existsById(id)) {
+                PVLS_repoVinculo.deleteById(id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

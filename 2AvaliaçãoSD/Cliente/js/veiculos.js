@@ -1,4 +1,9 @@
-const URL_BASE = 'http://localhost:8080/gestor';
+// URL base do serviço Gestor.
+// Por padrão aponta para o PC1 (Gestor). Se preferir, sobrescreva em HTML com:
+// <script>window.GESTOR_URL = 'http://26.3.21.108:8080/gestor';</script>
+const URL_BASE = (window.GESTOR_URL && String(window.GESTOR_URL).trim() !== '')
+    ? window.GESTOR_URL
+    : 'http://26.3.21.108:8080/gestor';
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('formVeiculo').addEventListener('submit', salvarVeiculo);

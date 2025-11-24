@@ -2,6 +2,7 @@ package com.example.AvaliacaoGestorSD.Controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.ArrayList;
@@ -21,8 +22,11 @@ public class PVLS_GestorController {
     @Autowired
     private RestTemplate restTemplate;
 
-    private static final String URL_SERVICO_PESSOAS = "http://localhost:8081";
-    private static final String URL_SERVICO_VEICULOS = "http://localhost:8082";
+    @Value("${pessoas.url}")
+    private String URL_SERVICO_PESSOAS;
+
+    @Value("${veiculos.url}")
+    private String URL_SERVICO_VEICULOS;
 
     // ============ ENDPOINTS DE PESSOAS ============
 
@@ -119,6 +123,11 @@ public class PVLS_GestorController {
             null,
             PVLS_VinculoDTO.class
         );
+    }
+
+    @DeleteMapping("/vinculo/{idPessoa}/{idVeiculo}")
+    public void desvincularVeiculo(@PathVariable Long idPessoa, @PathVariable Long idVeiculo) {
+        restTemplate.delete(URL_SERVICO_PESSOAS + "/pessoas/" + idPessoa + "/veiculo/" + idVeiculo);
     }
 
     // ============ ENDPOINT DE RELATÓRIO ============
